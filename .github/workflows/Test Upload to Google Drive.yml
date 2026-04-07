@@ -1,4 +1,4 @@
-name: Test Upload to Google Drive
+name: Upload to Google Drive
 
 on:
   workflow_dispatch:
@@ -13,14 +13,15 @@ jobs:
 
       - name: Install rclone
         run: |
-          sudo apt update
-          sudo apt install -y unzip curl
           curl https://rclone.org/install.sh | sudo bash
 
-      - name: Setup rclone with service account
+      - name: Setup service account JSON
         run: |
           mkdir -p ~/.config/rclone
-          printf '%s' "${{ secrets.GDRIVE_SERVICE_ACCOUNT }}" > ~/service_account.json
+          printf '%b' "${{ secrets.GDRIVE_SERVICE_ACCOUNT }}" > ~/service_account.json
+
+      - name: Configure rclone for Google Drive
+        run: |
           rclone config create gdrive drive scope drive.file service_account_file ~/service_account.json
 
       - name: Upload spotify.png to Drive
