@@ -19,30 +19,32 @@ jobs:
 
       - name: Save Service Account JSON
         run: |
-          mkdir -p $HOME/.secrets
-          printf "%s" "${{ secrets.GDRIVE_SERVICE_ACCOUNT }}" > $HOME/.secrets/service_account.json
+          echo "${{ secrets.GDRIVE_SERVICE_ACCOUNT }}" > service_account.json
 
       - name: Upload spotify.png
-        env:
-          SERVICE_ACCOUNT_FILE: $HOME/.secrets/service_account.json
         run: |
           python - <<EOF
           from google.oauth2 import service_account
           from googleapiclient.discovery import build
-          import os
+          from googleapiclient.http import MediaFileUpload
 
-          SERVICE_ACCOUNT_FILE = os.environ["SERVICE_ACCOUNT_FILE"]
-
+          SERVICE_ACCOUNT_FILE = 'service_account.json'
           SCOPES = ['https://www.googleapis.com/auth/drive.file']
 
           credentials = service_account.Credentials.from_service_account_file(
-              SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+              SERVICE_ACCOUNT_FILE, scopes=SCOPES
+          )
 
           service = build('drive', 'v3', credentials=credentials)
 
           file_metadata = {'name': 'spotify.png'}
           media = MediaFileUpload('spotify.png', mimetype='image/png')
-          file = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+
+          file = service.files().create(
+              body=file_metadata,
+              media_body=media,
+              fields='id'
+          ).execute()
 
           print(f"✅ Uploaded file ID: {file.get('id')}")
           EOF
