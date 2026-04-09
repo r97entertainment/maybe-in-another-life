@@ -88,18 +88,17 @@ if [ -n "$GH_TOKEN" ]; then
     echo "📦 Uploading to GitHub Release (Direct MP4)..."
     TAG_NAME="v-${GITHUB_RUN_ID:-$(date +%s)}"
     
-    # Create the release and upload the single file
+    # Create the release
     gh release create "$TAG_NAME" "$out_file" --title "Reel: $safe_name" --notes "Direct MP4 link"
     
-    # Clean up old releases to save space (keeps only the latest one)
     echo "🧹 Cleaning up old releases..."
-    # We add || true and check if any releases exist before looping
-    OLD_RELEASES=$(gh release list --limit 10 | grep "v-" | grep -v "$TAG_NAME" | awk '{print $1}') || true
+    # FIX: Use --json to get ONLY the tagName, ensuring we don't grab the Title by mistake
+    OLD_RELEASES=$(gh release list --limit 20 --json tagName --jq '.[].tagName' | grep "v-" | grep -v "$TAG_NAME") || true
     
     if [ -n "$OLD_RELEASES" ]; then
-        echo "$OLD_RELEASES" | while read -r old_tag; do
+        for old_tag in $OLD_RELEASES; do
             echo "Deleting old release: $old_tag"
-            gh release delete "$old_tag" --yes --cleanup-tag || echo "Could not delete $old_tag, skipping..."
+            gh release delete "$old_tag" --yes --cleanup-tag || true
         done
     else
         echo "✨ No old releases found to clean."
@@ -107,7 +106,4 @@ if [ -n "$GH_TOKEN" ]; then
 fi
 
 echo "✅ SUCCESS! Final file: $out_file"
-rm -rf "$TMP"
-
-echo "✅ SUCCESS! Final file: $out_file"
-rm -rf "$TMP"
+ rm -rf "$TMP"
