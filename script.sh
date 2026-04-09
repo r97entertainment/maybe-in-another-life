@@ -43,7 +43,7 @@ line=$((RANDOM % TOTAL + 1))
 
 # CLEANING: Perl nukes the "ghost boxes"
 raw=$(sed -n "${line}p" "$QUOTES_FILE" | perl -pe 's/[^[:ascii:]]//g; s/[\x00-\x1f\x7f]//g' | xargs)
-echo "$raw" | fold -s -w 35 > "$TMP/quote.txt"
+echo "$raw" | fold -s -w 45 > "$TMP/quote.txt"
 
 logo_start=$(echo "$DUR" | awk '{print $1 / 2}')
 logo_fade=$(echo "$DUR" | awk '{print $1 - 1.2}')
