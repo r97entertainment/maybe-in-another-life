@@ -51,6 +51,7 @@ git config --global user.email "github-actions[bot]@users.noreply.github.com"
 git add .
 # [skip ci] prevents the action from triggering itself in an infinite loop
 git commit -m "Automated Warehouse Sync [skip ci]" || echo "No changes to commit"
-git push origin main
 
+# This automatically pushes to the current active branch
+git push origin $(git rev-parse --abbrev-ref HEAD)
 echo "✅ Sync and Push complete. Check your repo now!"
