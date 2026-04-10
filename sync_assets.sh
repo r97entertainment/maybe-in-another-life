@@ -21,13 +21,16 @@ service_account_file = ~/.config/rclone/service_account.json
 scope = drive.readonly
 EOF
 
-# 3. Loop through and Sync Folders
+# 3. Loop through and Mirror Folders
 if [ -n "$GDRIVE_FOLDER_ID" ]; then
     for FOLDER in $SYNC_FOLDERS; do
-        echo "🔄 Mirroring Folder: $FOLDER..."
+        echo "🔄 Mirroring (Syncing) Folder: $FOLDER..."
+        
+        # Ensure the local folder exists
         mkdir -p "./$FOLDER"
 
-        rclone copy "private_drive:$FOLDER" "./$FOLDER" \
+        # 'sync' will DELETE files in GitHub that no longer exist in GDrive
+        rclone sync "private_drive:$FOLDER" "./$FOLDER" \
             --drive-root-folder-id "$GDRIVE_FOLDER_ID" \
             --checksum \
             --verbose \
@@ -48,6 +51,7 @@ git config --global user.email "github-actions[bot]@users.noreply.github.com"
 git add .
 # [skip ci] prevents the action from triggering itself in an infinite loop
 git commit -m "Automated Warehouse Sync [skip ci]" || echo "No changes to commit"
-git push origin main
 
+# This automatically pushes to the current active branch
+git push origin $(git rev-parse --abbrev-ref HEAD)
 echo "✅ Sync and Push complete. Check your repo now!"
