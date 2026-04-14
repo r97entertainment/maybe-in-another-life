@@ -4,19 +4,12 @@ on:
   workflow_dispatch:
   push:
   schedule:
-    - cron: '0 9 * * *'
-      timezone: 'Asia/Kolkata'
-    - cron: '0 10 * * *'
-      timezone: 'Asia/Kolkata'
-    - cron: '0 11 * * *'
-      timezone: 'Asia/Kolkata'
-    - cron: '0 12 * * *'
-      timezone: 'Asia/Kolkata'
-    - cron: '0 13 * * *'
-      timezone: 'Asia/Kolkata'
-    - cron: '0 14 * * *'
-      timezone: 'Asia/Kolkata'
-
+    - cron: '30 3 * * *'
+    - cron: '30 4 * * *'
+    - cron: '30 5 * * *'
+    - cron: '30 6 * * *'
+    - cron: '30 7 * * *'
+    - cron: '30 8 * * *'
 
 permissions:
   contents: write
@@ -24,7 +17,6 @@ permissions:
 jobs:
   render:
     runs-on: ubuntu-latest
-    # --- TIME LIMIT ADDED HERE ---
     timeout-minutes: 10
     steps:
       - name: Checkout repo
