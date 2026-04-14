@@ -16,18 +16,7 @@ on:
       timezone: 'Asia/Kolkata'
     - cron: '0 14 * * *'
       timezone: 'Asia/Kolkata'
-    - cron: '0 15 * * *'
-      timezone: 'Asia/Kolkata'
-    - cron: '0 16 * * *'
-      timezone: 'Asia/Kolkata'
-    - cron: '0 17 * * *'
-      timezone: 'Asia/Kolkata'
-    - cron: '0 18 * * *'
-      timezone: 'Asia/Kolkata'
-    - cron: '0 19 * * *'
-      timezone: 'Asia/Kolkata'
-    - cron: '0 20 * * *'
-      timezone: 'Asia/Kolkata'
+
 
 permissions:
   contents: write
