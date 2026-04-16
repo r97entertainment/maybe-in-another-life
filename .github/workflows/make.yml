@@ -3,13 +3,6 @@ name: Render Reel Video -Make.com
 on:
   workflow_dispatch:
   push:
-  schedule:
-    - cron: '30 3 * * *'
-    - cron: '30 4 * * *'
-    - cron: '30 5 * * *'
-    - cron: '30 6 * * *'
-    - cron: '30 7 * * *'
-    - cron: '30 8 * * *'
 
 permissions:
   contents: write
